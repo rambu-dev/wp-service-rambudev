@@ -630,7 +630,7 @@ export default function WordPressLanding() {
               <PricingCard
                 title="One-time fix"
                 eyebrow="For urgent problems"
-                price="£95"
+                price="$35"
                 unit="/ hour"
                 features={[
                   "Issue diagnosis & estimate",
@@ -642,7 +642,7 @@ export default function WordPressLanding() {
                 featured
                 title="Maintenance plan"
                 eyebrow="Most popular"
-                price="£350"
+                price="$350"
                 unit="/ month"
                 features={[
                   "Monthly updates & backups",
@@ -871,10 +871,10 @@ export default function WordPressLanding() {
                         aria-describedby={fieldError("budget") ? "contact-budget-error" : undefined}
                       >
                         <option value="">Select a range</option>
-                        <option>Under £500</option>
-                        <option>£500 – £2,000</option>
-                        <option>£2,000 – £5,000</option>
-                        <option>£5,000+</option>
+                        <option>Under $500</option>
+                        <option>$500 – $2,000</option>
+                        <option>$2,000 – $5,000</option>
+                        <option>$5,000+</option>
                         <option>Not sure yet</option>
                       </select>
                     </Field>

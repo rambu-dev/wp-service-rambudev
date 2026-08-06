@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import { GoogleTagManager } from '@/components/google-tag-manager'
 import './globals.css'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-geist' })
@@ -23,8 +24,8 @@ title: 'rambudev | Senior WordPress Development',
 
 export const viewport: Viewport = { themeColor: '#07111f', colorScheme: 'dark', width: 'device-width', initialScale: 1 }
 
-const jsonLd = { '@context': 'https://schema.org', '@type': 'ProfessionalService', name: 'rambudev', url: 'https://wpcraft.dev', description: 'Senior WordPress development, custom plugins, themes, maintenance, and troubleshooting.', email: 'vn.nqhung@gmail.com', areaServed: 'Worldwide', priceRange: '££' }
+const jsonLd = { '@context': 'https://schema.org', '@type': 'ProfessionalService', name: 'rambudev', url: 'https://wpcraft.dev', description: 'Senior WordPress development, custom plugins, themes, maintenance, and troubleshooting.', email: 'vn.nqhung@gmail.com', areaServed: 'Worldwide', priceRange: '$$' }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className="bg-background"><body className={`${geist.variable} ${geistMono.variable} antialiased`}><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />{children}{process.env.NODE_ENV === 'production' && <Analytics />}</body></html>
+  return <html lang="en" className="bg-background"><body className={`${geist.variable} ${geistMono.variable} antialiased`}><GoogleTagManager /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />{children}{process.env.NODE_ENV === 'production' && <Analytics />}</body></html>
 }

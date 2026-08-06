@@ -9,10 +9,10 @@ export const contactServices = [
 ] as const
 
 export const budgetRanges = [
-  'Under £500',
-  '£500 – £2,000',
-  '£2,000 – £5,000',
-  '£5,000+',
+  'Under $500',
+  '$500 – $2,000',
+  '$2,000 – $5,000',
+  '$5,000+',
   'Not sure yet',
 ] as const
 
