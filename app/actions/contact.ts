@@ -1,6 +1,7 @@
 'use server'
 
 import { contactFormSchema } from '@/lib/contact-schema'
+import { sendContactEmail } from '@/lib/send-contact-email'
 
 const emptyContactState = {
   status: 'idle' as const,
@@ -39,11 +40,17 @@ export async function submitContactForm(
     }
   }
 
-  // This is the server-side processing boundary. Connect email or CRM delivery here later.
-  console.info('[contact] New project enquiry received', {
-    ...parsed.data,
-    receivedAt: new Date().toISOString(),
-  })
+  try {
+    const emailId = await sendContactEmail(parsed.data)
+    console.info('[contact] Project enquiry delivered', { emailId })
+  } catch (error) {
+    console.error('[contact] Project enquiry delivery failed', error)
+    return {
+      status: 'error',
+      message: 'Your message could not be sent right now. Please email vn.nqhung@gmail.com directly.',
+      fieldErrors: {},
+    }
+  }
 
   return {
     status: 'success',
