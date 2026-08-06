@@ -2,6 +2,7 @@
 
 import { contactFormSchema } from '@/lib/contact-schema'
 import { sendContactEmail } from '@/lib/send-contact-email'
+import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 const emptyContactState = {
   status: 'idle' as const,
@@ -37,6 +38,17 @@ export async function submitContactForm(
       status: 'error',
       message: 'Please review the highlighted fields and try again.',
       fieldErrors: parsed.error.flatten().fieldErrors,
+    }
+  }
+
+  const turnstileToken = String(formData.get('cf-turnstile-response') ?? '')
+  const isHuman = await verifyTurnstile(turnstileToken)
+
+  if (!isHuman) {
+    return {
+      status: 'error',
+      message: 'Spam verification failed. Please try again.',
+      fieldErrors: {},
     }
   }
 

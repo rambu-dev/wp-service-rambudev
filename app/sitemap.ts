@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const siteUrl = 'https://wpcraft.dev'
+const siteUrl = 'https://wp.rambu.dev'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

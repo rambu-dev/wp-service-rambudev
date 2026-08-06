@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { submitContactForm } from "@/app/actions/contact";
+import { Turnstile } from "@/components/turnstile";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -897,6 +898,9 @@ export default function WordPressLanding() {
                         <option>Phone</option>
                       </select>
                     </Field>
+                    <div className="sm:col-span-2">
+                      <Turnstile resetKey={contactState} />
+                    </div>
                     <div className="sm:col-span-2">
                       <button
                         disabled={isPending}
