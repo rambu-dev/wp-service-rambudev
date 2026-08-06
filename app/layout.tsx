@@ -30,7 +30,7 @@ title: 'rambudev | Senior WordPress Development',
   twitter: { card: 'summary_large_image', title: 'rambudev | Senior WordPress Development', description: 'Custom WordPress development, maintenance, and troubleshooting.' },
 }
 
-export const viewport: Viewport = { themeColor: '#07111f', colorScheme: 'dark', width: 'device-width', initialScale: 1 }
+export const viewport: Viewport = { themeColor: '#f8fafc', colorScheme: 'light', width: 'device-width', initialScale: 1 }
 
 const jsonLd = { '@context': 'https://schema.org', '@type': 'ProfessionalService', name: 'rambudev', url: 'https://wpcraft.dev', description: 'Senior WordPress development, custom plugins, themes, maintenance, and troubleshooting.', email: 'vn.nqhung@gmail.com', areaServed: 'Worldwide', priceRange: '$$' }
 

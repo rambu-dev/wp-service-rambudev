@@ -276,8 +276,8 @@ export default function WordPressLanding() {
           <div className="mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
             <div className="relative z-10">
               <Reveal>
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 font-mono text-xs text-primary">
-                  <span className="size-1.5 animate-pulse rounded-full bg-primary" />{" "}
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 font-mono text-xs text-accent">
+                  <span className="size-1.5 animate-pulse rounded-full bg-accent" />{" "}
                   Available for select projects
                 </div>
               </Reveal>
