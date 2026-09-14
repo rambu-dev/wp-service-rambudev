@@ -7,6 +7,7 @@ declare global {
   interface Window {
     turnstile?: {
       render: (container: HTMLElement, options: Record<string, unknown>) => string
+      reset: (widgetId: string) => void
       remove: (widgetId: string) => void
     }
   }
@@ -17,24 +18,33 @@ export function Turnstile({ resetKey }: { resetKey: unknown }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const widgetIdRef = useRef<string | null>(null)
   const [scriptReady, setScriptReady] = useState(false)
+  const [error, setError] = useState('')
 
   const renderWidget = useCallback(() => {
     if (!siteKey || !containerRef.current || !window.turnstile) return
-
-    if (widgetIdRef.current) {
-      window.turnstile.remove(widgetIdRef.current)
-    }
 
     widgetIdRef.current = window.turnstile.render(containerRef.current, {
       sitekey: siteKey,
       action: 'contact',
       theme: 'light',
       size: 'flexible',
+      callback: () => setError(''),
+      'expired-callback': () =>
+        setError('Spam verification expired. Please complete it again.'),
+      'timeout-callback': () =>
+        setError('Spam verification timed out. Please complete it again.'),
+      'error-callback': () => {
+        setError('Spam verification could not load. Please disable content blockers or refresh and try again.')
+        // Prevent Turnstile from raising an additional uncaught client error.
+        return true
+      },
     })
   }, [siteKey])
 
   useEffect(() => {
-    if (scriptReady) renderWidget()
+    if (!scriptReady || widgetIdRef.current) return
+
+    renderWidget()
 
     return () => {
       if (widgetIdRef.current && window.turnstile) {
@@ -42,7 +52,14 @@ export function Turnstile({ resetKey }: { resetKey: unknown }) {
         widgetIdRef.current = null
       }
     }
-  }, [renderWidget, resetKey, scriptReady])
+  }, [renderWidget, scriptReady])
+
+  useEffect(() => {
+    if (!scriptReady || !widgetIdRef.current || !window.turnstile) return
+
+    setError('')
+    window.turnstile.reset(widgetIdRef.current)
+  }, [resetKey, scriptReady])
 
   if (!siteKey) {
     return (
@@ -60,6 +77,11 @@ export function Turnstile({ resetKey }: { resetKey: unknown }) {
         onReady={() => setScriptReady(true)}
       />
       <div ref={containerRef} className="min-h-[65px]" />
+      {error && (
+        <p className="mt-2 text-xs text-destructive" role="alert">
+          {error}
+        </p>
+      )}
     </>
   )
 }
