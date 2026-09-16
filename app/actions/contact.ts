@@ -2,7 +2,6 @@
 
 import { contactFormSchema } from '@/lib/contact-schema'
 import { sendContactEmail } from '@/lib/send-contact-email'
-import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 const emptyContactState = {
   status: 'idle' as const,
@@ -16,12 +15,29 @@ export type ContactActionState = {
   fieldErrors: Partial<Record<'name' | 'email' | 'website' | 'service' | 'details' | 'budget' | 'contact', string[]>>
 }
 
+const MIN_FORM_COMPLETION_MS = 1_500
+const MAX_FORM_COMPLETION_MS = 24 * 60 * 60 * 1_000
+
+function isLikelySpam(formData: FormData) {
+  // A hidden field catches bots that indiscriminately fill every input.
+  if (String(formData.get('company') ?? '').trim()) return true
+
+  // This is deliberately optional so the form still works when JavaScript is
+  // unavailable. When present, it rejects submissions completed implausibly
+  // quickly or from an abandoned form.
+  const formStartedAt = String(formData.get('formStartedAt') ?? '')
+  if (!formStartedAt) return false
+
+  const startedAt = Number(formStartedAt)
+  const elapsed = Date.now() - startedAt
+  return !Number.isFinite(startedAt) || elapsed < MIN_FORM_COMPLETION_MS || elapsed > MAX_FORM_COMPLETION_MS
+}
+
 export async function submitContactForm(
   _previousState: ContactActionState,
   formData: FormData,
 ): Promise<ContactActionState> {
-  const honeypot = String(formData.get('company') ?? '').trim()
-  if (honeypot) return emptyContactState
+  if (isLikelySpam(formData)) return emptyContactState
 
   const parsed = contactFormSchema.safeParse({
     name: String(formData.get('name') ?? ''),
@@ -38,17 +54,6 @@ export async function submitContactForm(
       status: 'error',
       message: 'Please review the highlighted fields and try again.',
       fieldErrors: parsed.error.flatten().fieldErrors,
-    }
-  }
-
-  const turnstileToken = String(formData.get('cf-turnstile-response') ?? '')
-  const isHuman = await verifyTurnstile(turnstileToken)
-
-  if (!isHuman) {
-    return {
-      status: 'error',
-      message: 'Spam verification failed. Please try again.',
-      fieldErrors: {},
     }
   }
 

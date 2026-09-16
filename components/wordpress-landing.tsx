@@ -1,8 +1,7 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { submitContactForm } from "@/app/actions/contact";
-import { Turnstile } from "@/components/turnstile";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -197,6 +196,8 @@ export default function WordPressLanding() {
     submitContactForm,
     initialContactState,
   );
+  const [formStartedAt, setFormStartedAt] = useState<number | null>(null);
+  useEffect(() => setFormStartedAt(Date.now()), []);
   const submitted = contactState.status === "success";
   const fieldError = (field: keyof typeof contactState.fieldErrors) =>
     contactState.fieldErrors[field]?.[0];
@@ -788,6 +789,9 @@ export default function WordPressLanding() {
                     action={contactAction}
                     className="grid gap-5 sm:grid-cols-2"
                   >
+                    {formStartedAt && (
+                      <input type="hidden" name="formStartedAt" value={formStartedAt} />
+                    )}
                     <Field label="Name" error={fieldError("name")} errorId="contact-name-error">
                       <input
                         id="contact-name"
@@ -898,9 +902,6 @@ export default function WordPressLanding() {
                         <option>Phone</option>
                       </select>
                     </Field>
-                    <div className="sm:col-span-2">
-                      <Turnstile resetKey={contactState} />
-                    </div>
                     <div className="sm:col-span-2">
                       <button
                         disabled={isPending}
