@@ -127,21 +127,30 @@ const steps = [
 ];
 
 const testimonials = [
-  [
-    "“Our checkout issue was diagnosed and fixed in one afternoon. Clear, capable, and refreshingly direct.”",
-    "Sarah M.",
-    "Agency owner",
-  ],
-  [
-    "“The custom plugin replaced three subscriptions and made our editorial workflow dramatically simpler.”",
-    "James R.",
-    "Publisher",
-  ],
-  [
-    "“Finally, a developer who explains the why—not just the what. Our site is faster and much easier to manage.”",
-    "Nina K.",
-    "Founder",
-  ],
+  {
+    quote: "“Very good experience working with Hung. Hope we will have new projects soon.”",
+    name: "Sébastien Micheal",
+    role: "Manaty",
+    avatar:
+      "https://media.licdn.com/dms/image/v2/D5603AQHgbbT-Z9TvVA/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1730693014887?e=1791417600&v=beta&t=z9Y3QGvZw_SOrwtDYL-z-r97tB3gUR4kCCb1l_LhOOM",
+    profileUrl: "https://www.linkedin.com/in/smichea/",
+    roleUrl: "https://www.linkedin.com/company/manaty/home/",
+  },
+  {
+    quote:
+      "“Great Work, Hung helped with a project that a lot of freelancers failed to deliver. He has the greatest attitude that you may get from freelancers, always willing to assist and going beyond a call of duty. He comes very recommended.”",
+    name: "Winchester Hills",
+    role: "South Africa",
+  },
+  {
+    quote: "“Amazing —",
+    name: "Ephraim Danny Wong",
+    role: "Senior Graphic & Web Designer | Web Project Manager | Video Editor",
+    avatar:
+      "https://media.licdn.com/dms/image/v2/C560BAQEMcJExg88Kdw/company-logo_400_400/company-logo_400_400/0/1630408320734?e=1791417600&v=beta&t=3ZA7-xMtJYmH9bPJqGBIN1Ro2v01zPUInMIPE4WQwIg",
+    profileUrl: "https://www.linkedin.com/in/ephraimdanny/",
+    projectUrl: "https://ccscc.info",
+  },
 ];
 
 const faqs = [
@@ -588,9 +597,9 @@ export default function WordPressLanding() {
               </div>
             </Reveal>
             <div className="grid gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-3">
-              {testimonials.map(([quote, name, role], i) => (
-                <Reveal key={name} delay={i * 0.06}>
-                  <figure className="h-full bg-card p-6 sm:p-8">
+              {testimonials.map((testimonial, i) => (
+                <Reveal key={testimonial.name} delay={i * 0.06} className="h-full">
+                  <figure className="flex h-full flex-col bg-card p-6 sm:p-8">
                     <div
                       className="flex gap-1 text-primary"
                       aria-label="5 out of 5 stars"
@@ -599,14 +608,60 @@ export default function WordPressLanding() {
                         <span key={index}>★</span>
                       ))}
                     </div>
-                    <blockquote className="mt-8 text-sm leading-7 text-foreground/90">
-                      {quote}
+                    <blockquote className="mt-8 flex-1 text-sm leading-7 text-foreground/90">
+                      {testimonial.quote}
+                      {testimonial.projectUrl && (
+                        <>
+                          {" "}
+                          <a
+                            href={testimonial.projectUrl}
+                            target="_blank"
+                            rel="nofollow noopener noreferrer"
+                            className="text-primary underline underline-offset-4"
+                          >
+                            ccscc.info”
+                          </a>
+                        </>
+                      )}
                     </blockquote>
-                    <figcaption className="mt-8 border-t border-border pt-4">
-                      <p className="font-mono text-xs font-semibold">{name}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        {role}
-                      </p>
+                    <figcaption className="mt-8 flex min-h-[84px] items-center gap-3 border-t border-border pt-4">
+                      {testimonial.avatar && (
+                        <img
+                          src={testimonial.avatar}
+                          alt=""
+                          className="size-9 rounded-full object-cover"
+                        />
+                      )}
+                      <div>
+                        {testimonial.profileUrl ? (
+                          <a
+                            href={testimonial.profileUrl}
+                            target="_blank"
+                            rel="nofollow noopener noreferrer"
+                            className="font-mono text-xs font-semibold underline underline-offset-4"
+                          >
+                            {testimonial.name}
+                          </a>
+                        ) : (
+                          <p className="font-mono text-xs font-semibold">
+                            {testimonial.name}
+                          </p>
+                        )}
+                        {testimonial.roleUrl ? (
+                          <a
+                            href={testimonial.roleUrl}
+                            target="_blank"
+                            rel="nofollow noopener noreferrer"
+                            className="mt-1 block text-xs text-muted-foreground underline underline-offset-4"
+                          >
+                            {testimonial.role}
+                          </a>
+                        ) : (
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {testimonial.role}
+                          </p>
+                        )}
+                      </div>
                     </figcaption>
                   </figure>
                 </Reveal>
